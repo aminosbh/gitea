@@ -372,6 +372,7 @@ func repoAssignment(ctx *Context, repo *repo_model.Repository) {
 			return
 		}
 		ctx.Data["MirrorEnablePrune"] = ctx.Repo.Mirror.EnablePrune
+		ctx.Data["MirrorEnableProtectRefs"] = ctx.Repo.Mirror.EnableProtectRefs
 		ctx.Data["MirrorInterval"] = ctx.Repo.Mirror.Interval
 		ctx.Data["Mirror"] = ctx.Repo.Mirror
 	}

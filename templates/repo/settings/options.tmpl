@@ -115,6 +115,13 @@
 									<label>{{.i18n.Tr "repo.mirror_prune_desc"}}</label>
 										</div>
 									</div>
+									<div class="inline field {{if .Err_EnableProtectRefs}}error{{end}}">
+										<label>{{.i18n.Tr "repo.mirror_protect_refs"}}</label>
+										<div class="ui checkbox">
+									<input id="enable_protect_refs" name="enable_protect_refs" type="checkbox" {{if .MirrorEnableProtectRefs}}checked{{end}}>
+									<label>{{.i18n.Tr "repo.mirror_protect_refs_desc"}}</label>
+										</div>
+									</div>
 									<div class="inline field {{if .Err_Interval}}error{{end}}">
 										<label for="interval">{{.i18n.Tr "repo.mirror_interval"}}</label>
 										<input id="interval" name="interval" value="{{.MirrorInterval}}">

@@ -39,11 +39,18 @@ func UpdateAddress(m *repo_model.Mirror, addr string) error {
 		return err
 	}
 
-	cmd := git.NewCommand("remote", "add", remoteName, "--mirror=fetch", addr)
+	cmdArgs := []string{ "remote", "add", remoteName, "--mirror=fetch", addr }
+	cmdDescriptionFormat := "remote add %s --mirror=fetch %s [repo_path: %s]"
+	if m.EnableProtectRefs {
+		cmdArgs = []string{ "remote", "add", remoteName, addr }
+		cmdDescriptionFormat = "remote add %s %s [repo_path: %s]"
+	}
+
+	cmd := git.NewCommand(cmdArgs...)
 	if strings.Contains(addr, "://") && strings.Contains(addr, "@") {
-		cmd.SetDescription(fmt.Sprintf("remote add %s --mirror=fetch %s [repo_path: %s]", remoteName, util.NewStringURLSanitizer(addr, true).Replace(addr), repoPath))
+		cmd.SetDescription(fmt.Sprintf(cmdDescriptionFormat, remoteName, util.NewStringURLSanitizer(addr, true).Replace(addr), repoPath))
 	} else {
-		cmd.SetDescription(fmt.Sprintf("remote add %s --mirror=fetch %s [repo_path: %s]", remoteName, addr, repoPath))
+		cmd.SetDescription(fmt.Sprintf(cmdDescriptionFormat, remoteName, addr, repoPath))
 	}
 	_, err = cmd.RunInDir(repoPath)
 	if err != nil && !strings.HasPrefix(err.Error(), "exit status 128 - fatal: No such remote ") {
@@ -59,11 +66,18 @@ func UpdateAddress(m *repo_model.Mirror, addr string) error {
 			return err
 		}
 
-		cmd = git.NewCommand("remote", "add", remoteName, "--mirror=fetch", wikiRemotePath)
+		cmdArgs := []string{ "remote", "add", remoteName, "--mirror=fetch", wikiRemotePath }
+		cmdDescriptionFormat := "remote add %s --mirror=fetch %s [repo_path: %s]"
+		if m.EnableProtectRefs {
+			cmdArgs = []string{ "remote", "add", remoteName, wikiRemotePath }
+			cmdDescriptionFormat = "remote add %s %s [repo_path: %s]"
+		}
+
+		cmd = git.NewCommand(cmdArgs...)
 		if strings.Contains(wikiRemotePath, "://") && strings.Contains(wikiRemotePath, "@") {
-			cmd.SetDescription(fmt.Sprintf("remote add %s --mirror=fetch %s [repo_path: %s]", remoteName, util.NewStringURLSanitizer(wikiRemotePath, true).Replace(wikiRemotePath), wikiPath))
+			cmd.SetDescription(fmt.Sprintf(cmdDescriptionFormat, remoteName, util.NewStringURLSanitizer(wikiRemotePath, true).Replace(wikiRemotePath), wikiPath))
 		} else {
-			cmd.SetDescription(fmt.Sprintf("remote add %s --mirror=fetch %s [repo_path: %s]", remoteName, wikiRemotePath, wikiPath))
+			cmd.SetDescription(fmt.Sprintf(cmdDescriptionFormat, remoteName, wikiRemotePath, wikiPath))
 		}
 		_, err = cmd.RunInDir(wikiPath)
 		if err != nil && !strings.HasPrefix(err.Error(), "exit status 128 - fatal: No such remote ") {

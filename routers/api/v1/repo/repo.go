@@ -954,8 +954,8 @@ func updateRepoArchivedState(ctx *context.APIContext, opts api.EditRepoOption) e
 func updateMirror(ctx *context.APIContext, opts api.EditRepoOption) error {
 	repo := ctx.Repo.Repository
 
-	// only update mirror if interval or enable prune are provided
-	if opts.MirrorInterval == nil && opts.EnablePrune == nil {
+	// only update mirror if interval or enable prune or enable protect refs are provided
+	if opts.MirrorInterval == nil && opts.EnablePrune == nil && opts.EnableProtectRefs == nil {
 		return nil
 	}
 
@@ -1002,6 +1002,12 @@ func updateMirror(ctx *context.APIContext, opts api.EditRepoOption) error {
 	if opts.EnablePrune != nil {
 		mirror.EnablePrune = *opts.EnablePrune
 		log.Trace("Repository %s Mirror[%d] Set EnablePrune: %t", repo.FullName(), mirror.ID, mirror.EnablePrune)
+	}
+
+	// update EnableProtectRefs
+	if opts.EnableProtectRefs != nil {
+		mirror.EnableProtectRefs = *opts.EnableProtectRefs
+		log.Trace("Repository %s Mirror[%d] Set EnableProtectRefs: %t", repo.FullName(), mirror.ID, mirror.EnableProtectRefs)
 	}
 
 	// finally update the mirror in the DB
