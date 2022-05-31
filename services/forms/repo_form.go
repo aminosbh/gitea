@@ -131,6 +131,7 @@ type RepoSettingForm struct {
 	Private            bool
 	Template           bool
 	EnablePrune        bool
+	EnableProtectRefs  bool
 
 	// Advanced settings
 	EnableWiki                            bool

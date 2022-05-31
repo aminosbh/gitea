@@ -189,6 +189,8 @@ type EditRepoOption struct {
 	MirrorInterval *string `json:"mirror_interval,omitempty"`
 	// enable prune - remove obsolete remote-tracking references
 	EnablePrune *bool `json:"enable_prune,omitempty"`
+	// enable protect refs - protect local references
+	EnableProtectRefs *bool `json:"enable_protect_refs,omitempty"`
 }
 
 // GenerateRepoOption options when creating repository using a template

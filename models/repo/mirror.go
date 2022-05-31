@@ -32,6 +32,7 @@ type Mirror struct {
 	Repo        *Repository `xorm:"-"`
 	Interval    time.Duration
 	EnablePrune bool `xorm:"NOT NULL DEFAULT true"`
+	EnableProtectRefs bool `xorm:"NOT NULL DEFAULT false"`
 
 	UpdatedUnix    timeutil.TimeStamp `xorm:"INDEX"`
 	NextUpdateUnix timeutil.TimeStamp `xorm:"INDEX"`
